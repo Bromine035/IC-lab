@@ -1,0 +1,15 @@
+在 generate.py 裡面，我講解一下大概的意思好了:
+函數) chko: check overflow
+函數) btod: DRAM_data 的 bitarray 格式轉換到 int16 資料格式
+函數) dtob: int16 資料格式轉換到DRAM_data 的 bitarray 格式
+函數) rnda: random address 生 store load 用的 rs immediate
+函數) tryr: try run 給 beq jump 試跑一次看能不能跳
+字典) d0: 存 DRAM_data
+字典) d1: 存 DRAM_inst
+陣列) vr: vector of register 存 core_r0 ~ core_r15
+整數) i: pc*2 + 0x1000
+整數) nex: 下一個 pc*2 + 0x1000 (下一筆指令)
+整數) ns, nt, nd, ni: rs rt rd immed 的整數格式
+位列) bs, bt, bd, bi: rs rt rd immed 的 BitArray 格式
+字串) rs, rt, rd, immediate: rs rt rd immed 的 binary string 格式
+bool) ok0: true 是不能跳就把它改成往前跳，false 是可以跳 (beq jump 用的)
