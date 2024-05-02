@@ -3,4 +3,4 @@
 - Topic: System Verilog II (Verification)  
 - TA: 洪展斌  
 
-Sorry, I didn't finish this lab.
+This lab will be complete soon :)
