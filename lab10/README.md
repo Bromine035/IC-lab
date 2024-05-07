@@ -3,4 +3,8 @@
 - Topic: System Verilog II (Verification)  
 - TA: 洪展斌  
 
-This lab will be complete soon :)
+## The following files are contributed:  
+```
+./CHECKER.sv
+./PATTERN.sv
+```
