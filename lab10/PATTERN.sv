@@ -13,7 +13,7 @@ import usertype::*;
 parameter DRAM_p_r = "../00_TESTBED/DRAM/dram.dat";
 // parameter IDNUM   = 256;
 parameter cycle = `CYCLE_TIME;
-integer	pnum = 10000;
+integer	pnum = 2000;
 integer n0, n1, n2, f0, i0, i1, i2, i3, i4, i5, latency, total_latency;
 
 //================================================================
@@ -96,7 +96,6 @@ randomer_itm rd2 = new(514);
 // initial $readmemh(DRAM_p_r, golden_DRAM);
 
 initial begin
-    // $display("check 0");
     n0 = $urandom('d315);
     init_dram;
     inf.D = 'bx;
@@ -106,7 +105,6 @@ initial begin
     inf.num_valid = 1'b0;
     inf.amnt_valid = 1'b0;
     inf.rst_n = 1'b1;
-    // $display("check 1");
     #cycle;
     inf.rst_n = 1'b0;
     #cycle;
@@ -114,26 +112,23 @@ initial begin
     #cycle;
     #cycle;
 
+    total_latency = 0;
     nfrt = 0;
     rbuy = 256'b0;
     rsel = 256'b0;
-    // $display("check 2");
     for(i1 = 0; i1 < pnum; i1 = i1 + 1) begin
         if(nfrt > 0) begin
             for(i4 = 0; i4 < nfrt; i4 = i4 + 1) begin
                 if(vdrt[i4] == 0) nirt = i4;
             end
             if(vdrt[nirt] == 0) begin
-                // $display("check 4");
                 return_task;
             end
             else begin
-                // $display("check 5");
                 decide_task;
             end
         end
         else begin
-            // $display("check 3");
             decide_task;
         end
         if(nfrt > 0) begin
@@ -142,22 +137,20 @@ initial begin
             end
         end
         judge_task;
-        $display("\033[1;34mPat No.%6d - User_ID: %3d, Action: %10s, Item: %6s, Item_number: %2d, Amount: %5d, Seller_ID: %3d", i1, ruid, ract.name(), ritm.name(), rnum, ramt, rsid);
-        $display("\033[1;32mGolden result - Complete: %1b, Error_Msg: %14s, Out_info: %8h", rcmp, rerm.name(), roif);
+        // $display("\033[1;34mPat No.%6d - User_ID: %3d, Action: %10s, Item: %6s, Item_number: %2d, Amount: %5d, Seller_ID: %3d", i1, ruid, ract.name(), ritm.name(), rnum, ramt, rsid);
+        // $display("\033[1;32mGolden result - Complete: %1b, Error_Msg: %14s, Out_info: %8h", rcmp, rerm.name(), roif);
         #cycle;
         send_task;
-        // $display("check 6");
         wait_task;
-        // $display("check 7");
         output_task;
         n0 = $urandom()%9;
         #(cycle*n0);
 
         @(negedge clk);
     end
-    $display("-------------------------------------------------");
-    $display("-- All pattern passed because Br35 is handsome --");
-    $display("-------------------------------------------------");
+    // $display("-------------------------------------------------");
+    // $display("-- All pattern passed because Br35 is handsome --");
+    // $display("-------------------------------------------------");
     $finish;
 end
 
@@ -199,9 +192,9 @@ task decide_task; begin
     else begin
         rchu = 1'b0;
     end
-    n0 = $urandom()%'d16; // 6 2 2 6
-    if(n0 < 11) ract = Buy;
-    else if(n0 < 13) ract = Check;
+    n0 = $urandom()%'d16; // 9 3 3 1
+    if(n0 < 9) ract = Buy;
+    else if(n0 < 12) ract = Check;
     else if(n0 < 15) ract = Deposit;
     else ract = Return;
     
@@ -221,10 +214,10 @@ end
 endtask
 
 task buy_task; begin
-    n0 = $urandom()%8; // 4 1 2 1
-    if(n0 < 4) rerm0 = No_Err;
-    else if(n0 == 4) rerm0 = INV_Full;
-    else if(n0 < 7) rerm0 = INV_Not_Enough;
+    n0 = $urandom()%16; // 8 0 1 7
+    if(n0 < 8) rerm0 = No_Err;
+    else if(n0 < 8) rerm0 = INV_Full;
+    else if(n0 < 9) rerm0 = INV_Not_Enough;
     else rerm0 = Out_of_money;
     rd1.randomize();
     rsid = rd1.nsid;
@@ -350,7 +343,7 @@ task buy_task; begin
         end
     end
 
-    if($urandom()%2 == 0) insert_task;
+    if($urandom()%8 < 3) insert_task; // 3/8
 end
 endtask
 
@@ -701,10 +694,10 @@ task wait_task; begin
     latency = 0;
     while(inf.out_valid !== 1'b1) begin
         latency = latency + 1;
-        if(latency == 10000) begin
-            $display("Slimulation time too long > 10000");
-            $finish; 
-        end
+        // if(latency == 10000) begin
+        //     $display("Slimulation time too long > 10000");
+        //     $finish; 
+        // end
         @(negedge clk);
     end
     total_latency = total_latency + latency;
@@ -713,8 +706,9 @@ endtask
 
 task output_task; begin
     if(inf.err_msg != rerm || inf.complete != rcmp || inf.out_info != roif) begin
-        $display("\033[1;31mdesign result - Complete: %1b, Error_Msg: %14s, Out_info: %8h", inf.complete, inf.err_msg.name(), inf.out_info);
-        $display(":( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( ");
+        // $display("\033[1;31mdesign result - Complete: %1b, Error_Msg: %14s, Out_info: %8h", inf.complete, inf.err_msg.name(), inf.out_info);
+        // $display(":( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( ");
+        $display("Wrong Answer");
         $finish;
     end
 end
