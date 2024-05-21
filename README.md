@@ -2,7 +2,7 @@
 
 Instructor: 李鎮宜 Chen-Yi Lee  
 [National Yang Ming Chiao Tung University](https://www.nycu.edu.tw/) (NYCU)  
-Website: https://www.si2lab.org  
+Website: http://si2web.lab.nycu.edu.tw/faculty/  
 
 ## Overview
 
