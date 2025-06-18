@@ -13,7 +13,7 @@ import usertype::*;
 parameter DRAM_p_r = "../00_TESTBED/DRAM/dram.dat";
 // parameter IDNUM   = 256;
 parameter cycle = `CYCLE_TIME;
-integer	pnum = 2000;
+integer	pnum = 1000000;
 integer n0, n1, n2, f0, i0, i1, i2, i3, i4, i5, latency, total_latency;
 
 //================================================================
@@ -137,8 +137,8 @@ initial begin
             end
         end
         judge_task;
-        // $display("\033[1;34mPat No.%6d - User_ID: %3d, Action: %10s, Item: %6s, Item_number: %2d, Amount: %5d, Seller_ID: %3d", i1, ruid, ract.name(), ritm.name(), rnum, ramt, rsid);
-        // $display("\033[1;32mGolden result - Complete: %1b, Error_Msg: %14s, Out_info: %8h", rcmp, rerm.name(), roif);
+        $display("\033[1;34mPat No.%6d - User_ID: %3d, Action: %10s, Item: %6s, Item_number: %2d, Amount: %5d, Seller_ID: %3d", i1, ruid, ract.name(), ritm.name(), rnum, ramt, rsid);
+        $display("\033[1;32mGolden result - Complete: %1b, Error_Msg: %14s, Out_info: %8h", rcmp, rerm.name(), roif);
         #cycle;
         send_task;
         wait_task;
@@ -148,9 +148,9 @@ initial begin
 
         @(negedge clk);
     end
-    // $display("-------------------------------------------------");
-    // $display("-- All pattern passed because Br35 is handsome --");
-    // $display("-------------------------------------------------");
+    $display("-------------------------------------------------");
+    $display("-- All pattern passed because Br35 is handsome --");
+    $display("-------------------------------------------------");
     $finish;
 end
 
@@ -669,7 +669,8 @@ task send_task; begin
         inf.D = 'bx;
     end
     else if(ract == Check && rcks) begin
-        n0 = $urandom()%5 + 1;
+        // n0 = $urandom()%5 + 1;
+        n0 = $urandom()%4 + 1;
         #(cycle*n0);
         inf.id_valid = 1'b1;
         inf.D.d_id[1] = 'b0;
@@ -706,8 +707,12 @@ endtask
 
 task output_task; begin
     if(inf.err_msg != rerm || inf.complete != rcmp || inf.out_info != roif) begin
-        // $display("\033[1;31mdesign result - Complete: %1b, Error_Msg: %14s, Out_info: %8h", inf.complete, inf.err_msg.name(), inf.out_info);
-        // $display(":( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( ");
+        $display("\033[1;31mdesign result - Complete: %1b, Error_Msg: %14s, Out_info: %8h", inf.complete, inf.err_msg.name(), inf.out_info);
+        $display(":( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( FAIL :( ");
+        $display("\033[1;34mUser shop_info - Large_num: %2d, Medeium_num %2d, Small_num: %2d, Level: %8s, Exp: %5d", vu[ruid].si.large_num, vu[ruid].si.medium_num, vu[ruid].si.small_num, vu[ruid].si.level.name(), vu[ruid].si.exp);
+        $display("\033[1;32mUser user_info - Money: %5d, History_item: %6s, History_num: %2d, History_ID: %3d", vu[ruid].ui.money, vu[ruid].ui.shop_history.item_ID.name(), vu[ruid].ui.shop_history.item_num, vu[ruid].ui.shop_history.seller_ID);
+        $display("\033[1;34mSelr shop_info - Large_num: %2d, Medeium_num %2d, Small_num: %2d, Level: %8s, Exp: %5d", vu[rsid].si.large_num, vu[rsid].si.medium_num, vu[rsid].si.small_num, vu[rsid].si.level.name(), vu[rsid].si.exp);
+        $display("\033[1;32mSelr user_info - Money: %5d, History_item: %6s, History_num: %2d, History_ID: %3d", vu[rsid].ui.money, vu[rsid].ui.shop_history.item_ID.name(), vu[rsid].ui.shop_history.item_num, vu[rsid].ui.shop_history.seller_ID);
         $display("Wrong Answer");
         $finish;
     end
