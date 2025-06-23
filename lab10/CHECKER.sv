@@ -30,6 +30,7 @@ logic [2:0] r2;
 //Spec1 cov_inst_1 = new();
 
 covergroup cg1 @(posedge clk iff(inf.amnt_valid));
+    option.per_instance = 1;
     cp1: coverpoint inf.D.d_money
     {
         bins b0 = {[16'd0:16'd12000]};
@@ -42,6 +43,7 @@ covergroup cg1 @(posedge clk iff(inf.amnt_valid));
 endgroup
 
 covergroup cg2 @(posedge clk iff(inf.id_valid));
+    option.per_instance = 1;
     cp2: coverpoint inf.D.d_id[0]
     {
         bins b0 [] = {[8'd0:8'd255]};
@@ -51,6 +53,7 @@ covergroup cg2 @(posedge clk iff(inf.id_valid));
 endgroup
 
 covergroup cg3 @(posedge clk iff(inf.act_valid));
+    option.per_instance = 1;
     cp3: coverpoint inf.D.d_act[0]
     {
         bins b0  = (Buy => Buy);
@@ -74,6 +77,7 @@ covergroup cg3 @(posedge clk iff(inf.act_valid));
 endgroup
 
 covergroup cg4 @(posedge clk iff(inf.item_valid));
+    option.per_instance = 1;
     cp4: coverpoint inf.D.d_item[0]
     {
         bins b1 = {Large};
@@ -84,6 +88,7 @@ covergroup cg4 @(posedge clk iff(inf.item_valid));
 endgroup
 
 covergroup cg5 @(posedge clk iff(inf.out_valid));
+    option.per_instance = 1;
     cp5: coverpoint inf.err_msg
     {
         bins b0 = {INV_Not_Enough};
@@ -99,6 +104,7 @@ covergroup cg5 @(posedge clk iff(inf.out_valid));
 endgroup
 
 covergroup cg6 @(posedge clk iff(inf.out_valid));
+    option.per_instance = 1;
     cp6: coverpoint inf.complete
     {
         bins b0 = {1'b0};

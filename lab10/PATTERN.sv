@@ -13,7 +13,7 @@ import usertype::*;
 parameter DRAM_p_r = "../00_TESTBED/DRAM/dram.dat";
 // parameter IDNUM   = 256;
 parameter cycle = `CYCLE_TIME;
-integer	pnum = 1000000;
+integer	pnum = 2000;
 integer n0, n1, n2, f0, i0, i1, i2, i3, i4, i5, latency, total_latency;
 
 //================================================================
@@ -30,7 +30,7 @@ User_id vuid_rt [15:0];
 User_id vsid_rt [15:0];
 Item_id vitm_rt [15:0];
 Item_num vnum_rt [15:0];
-logic [3:0] vdrt [15:0]; // delay time of trturn task
+logic [3:0] vdrt [15:0]; // delay time of return task
 logic [4:0] nfrt; // number for the fifo of return task
 logic [3:0] nirt; // index of the fifo of return task
 
@@ -148,7 +148,7 @@ initial begin
 
         @(negedge clk);
     end
-    $display("-------------------------------------------------");
+    $display("\033[0m-------------------------------------------------");
     $display("-- All pattern passed because Br35 is handsome --");
     $display("-------------------------------------------------");
     $finish;
@@ -713,7 +713,7 @@ task output_task; begin
         $display("\033[1;32mUser user_info - Money: %5d, History_item: %6s, History_num: %2d, History_ID: %3d", vu[ruid].ui.money, vu[ruid].ui.shop_history.item_ID.name(), vu[ruid].ui.shop_history.item_num, vu[ruid].ui.shop_history.seller_ID);
         $display("\033[1;34mSelr shop_info - Large_num: %2d, Medeium_num %2d, Small_num: %2d, Level: %8s, Exp: %5d", vu[rsid].si.large_num, vu[rsid].si.medium_num, vu[rsid].si.small_num, vu[rsid].si.level.name(), vu[rsid].si.exp);
         $display("\033[1;32mSelr user_info - Money: %5d, History_item: %6s, History_num: %2d, History_ID: %3d", vu[rsid].ui.money, vu[rsid].ui.shop_history.item_ID.name(), vu[rsid].ui.shop_history.item_num, vu[rsid].ui.shop_history.seller_ID);
-        $display("Wrong Answer");
+        $display("\033[0mWrong Answer");
         $finish;
     end
 end
